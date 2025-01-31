@@ -18,6 +18,7 @@ interface ChatbotResponse {
     }>;
 }
 
+
 interface Message {
     id: string;
     sender: 'user' | 'bot';

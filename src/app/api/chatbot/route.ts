@@ -14,6 +14,7 @@ interface Question {
 interface InsurancePlan {
     PlanID: number;
     PlanName: string;
+    PdfLink: string;  // Added PDF link field
     OutOfNetworkCoverage: string;
     DeductibleIndividual: number;
     DeductibleFamily: number;
@@ -39,6 +40,7 @@ const insurancePlans: InsurancePlan[] = [
     {
         PlanID: 1,
         PlanName: "AmeriHealth Platinum",
+        PdfLink: "https://drive.google.com/file/d/15abfYJxr25RcHdQTDK4qU5iKKG-3Dfrr/view?usp=sharing",
         OutOfNetworkCoverage: "Not covered",
         DeductibleIndividual: 0,
         DeductibleFamily: 0,
@@ -55,6 +57,7 @@ const insurancePlans: InsurancePlan[] = [
     {
         PlanID: 2,
         PlanName: "AmeriHealth Gold",
+        PdfLink: "https://drive.google.com/file/d/1SkVyCJHk7UBgJweV1gV4gaHSSEuFEskD/view?usp=sharing",
         OutOfNetworkCoverage: "Not covered",
         DeductibleIndividual: 1500,
         DeductibleFamily: 3000,
@@ -71,6 +74,7 @@ const insurancePlans: InsurancePlan[] = [
     {
         PlanID: 3,
         PlanName: "AmeriHealth Silver",
+        PdfLink: "https://drive.google.com/file/d/1FbOjIXk3q3otIxzy9Q_Ri29sLKIf03RW/view?usp=sharing",
         OutOfNetworkCoverage: "Not covered",
         DeductibleIndividual: 2500,
         DeductibleFamily: 5000,
@@ -87,6 +91,7 @@ const insurancePlans: InsurancePlan[] = [
     {
         PlanID: 4,
         PlanName: "Horizon Blue",
+        PdfLink: "https://drive.google.com/file/d/1fGl7f1M1YtsmbkYJTzeE9DNHkNGR4Ktq/view?usp=sharing",
         OutOfNetworkCoverage: "Not covered",
         DeductibleIndividual: 1500,
         DeductibleFamily: 3000,
@@ -103,6 +108,7 @@ const insurancePlans: InsurancePlan[] = [
     {
         PlanID: 5,
         PlanName: "UnitedHealthcare Oxford",
+        PdfLink: "https://drive.google.com/file/d/1cS3TMeoxnIlDW8MmUiGGJKPAEE--jIAX/view?usp=sharing",
         OutOfNetworkCoverage: "Not covered",
         DeductibleIndividual: 0,
         DeductibleFamily: 0,
@@ -201,8 +207,6 @@ const insuranceQuestions: Question[] = [
 
 
 // Store user responses
-const userResponses = new Map<string, UserSession>();
-
 async function generatePersonalizedSummary(
     selectedPlan: InsurancePlan,
     userResponses: Map<string, any>,
@@ -220,6 +224,7 @@ async function generatePersonalizedSummary(
         preferredHospital: userResponses.get('preferred_hospital'),
         plan: {
             name: selectedPlan.PlanName,
+            pdfLink: selectedPlan.PdfLink,  // Added PDF link
             deductibles: {
                 individual: selectedPlan.DeductibleIndividual,
                 family: selectedPlan.DeductibleFamily
@@ -256,11 +261,16 @@ async function generatePersonalizedSummary(
     - Maternity Coinsurance: ${context.plan.maternity}%
     - Vaccination Coverage: ${context.plan.vaccination === 0 ? 'Full Coverage' : context.plan.vaccination === null ? 'Not Covered' : `$${context.plan.vaccination} Copay`}
 
-    Please provide a 3-4 paragraph summary explaining:
-    1. Why this plan matches their specific needs and circumstances
-    2. The key benefits that align with their healthcare requirements
-    3. Any specific advantages based on their family size and usage patterns
-    4. Potential cost savings based on their expected healthcare needs
+    Please provide a 2-paragraph summary:
+    1. First paragraph explaining:
+       - Why this plan matches their specific needs and circumstances
+       - The key benefits that align with their healthcare requirements
+       - Any specific advantages based on their family size and usage patterns
+       - Potential cost savings based on their expected healthcare needs
+    
+    2. Second paragraph should say:
+       "For complete details about your plan, please review the full plan documentation here: [PDF Link]"
+       Replace [PDF Link] with: ${context.plan.pdfLink}
 
     Make it personal, clear, and focused on value proposition. Avoid technical jargon.
     `;
@@ -269,6 +279,13 @@ async function generatePersonalizedSummary(
     const result = await model.generateContent(prompt);
     return result.response.text();
 }
+const userResponses = new Map<string, {
+    responses: Map<string, any>,
+    currentQuestionIndex: number,
+    phase: string,
+    userName?: string
+}>();
+
 function generateRecommendations(responses: Map<string, any>) {
     const planScores = insurancePlans.map(plan => {
         let score = 0;
@@ -373,7 +390,7 @@ export async function POST(req: Request) {
             userResponses.set(userId, {
                 responses: new Map(),
                 currentQuestionIndex: 0,
-                phase: 'questioning'
+                phase: "questioning" as "questioning"
             });
         }
 
@@ -420,7 +437,7 @@ export async function POST(req: Request) {
         // Check if all questions are answered
         if (userSession.currentQuestionIndex >= insuranceQuestions.length) {
             const recommendations = generateRecommendations(userSession.responses);
-            userSession.phase = 'selecting_plan';
+            userSession.phase = "selecting_plan" as "selecting_plan";
 
             return NextResponse.json({
                 type: 'recommendations',
