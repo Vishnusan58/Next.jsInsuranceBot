@@ -1,36 +1,89 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Insurance Plan Assistant Chatbot
 
-## Getting Started
+## Overview
+An intelligent chatbot system that helps users find the perfect insurance plan based on their personal needs, family size, and healthcare requirements. The chatbot uses AI to provide personalized recommendations and detailed plan summaries.
 
-First, run the development server:
+![Insurance Chatbot Demo](demo-screenshot.png)
 
+## Features
+
+### 1. Interactive Questionnaire
+- Personal information collection
+- Healthcare needs assessment
+- Family size evaluation
+- Coverage preferences
+- Budget considerations
+
+### 2. Smart Plan Recommendations
+The system analyzes user responses to recommend insurance plans based on:
+- Family composition
+- Healthcare requirements
+- Preferred hospital networks
+- Additional service needs
+- Budget constraints
+
+### 3. Personalized Plan Analysis
+Each recommendation includes:
+- Match score calculation
+- Cost breakdown
+- Coverage details
+- Benefit comparisons
+
+### 4. Available Insurance Plans
+
+#### AmeriHealth Platinum
+- Premium plan with zero deductibles
+- Comprehensive coverage
+- Low copays
+- Full maternity coverage
+[View Details](https://drive.google.com/file/d/15abfYJxr25RcHdQTDK4qU5iKKG-3Dfrr/view?usp=sharing)
+
+#### AmeriHealth Gold
+- Balanced coverage
+- Moderate deductibles
+- Affordable copays
+[View Details](https://drive.google.com/file/d/1SkVyCJHk7UBgJweV1gV4gaHSSEuFEskD/view?usp=sharing)
+
+#### AmeriHealth Silver
+- Budget-friendly option
+- Higher deductibles
+- Essential coverage
+[View Details](https://drive.google.com/file/d/1FbOjIXk3q3otIxzy9Q_Ri29sLKIf03RW/view?usp=sharing)
+
+#### Horizon Blue
+- Specialized family plan
+- Zero diagnostic test copays
+- Full maternity coverage
+[View Details](https://drive.google.com/file/d/1fGl7f1M1YtsmbkYJTzeE9DNHkNGR4Ktq/view?usp=sharing)
+
+#### UnitedHealthcare Oxford
+- Premium coverage
+- Zero deductibles
+- Low prescription copays
+[View Details](https://drive.google.com/file/d/1cS3TMeoxnIlDW8MmUiGGJKPAEE--jIAX/view?usp=sharing)
+
+## Technical Stack
+
+### Frontend
+- Next.js
+- React
+- TypeScript
+- Framer Motion (animations)
+- TailwindCSS (styling)
+
+### Backend
+- Next.js API Routes
+- Google's Generative AI (Gemini)
+- UUID for session management
+
+### Key Components
+- Chatbot Interface (`/src/components/Chatbot/index.tsx`)
+- API Route (`/src/app/api/chatbot/route.ts`)
+- Insurance Plans Data
+- Questionnaire Logic
+
+## Installation
+
+1. Clone the repository:
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
-
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+git clone https://github.com/yourusername/insurance-chatbot.git
